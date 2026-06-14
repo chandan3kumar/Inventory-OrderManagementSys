@@ -1,127 +1,263 @@
-# Stellar Inventory & Order Management System
+#  Stellar Inventory & Order Management System
 
-A production-ready, containerized full-stack Inventory & Order Management System built with a **React frontend**, a **Python FastAPI backend**, and a **PostgreSQL database**. 
+A full-stack Inventory & Order Management System built using **React**, **FastAPI**, **PostgreSQL**, **Docker**, and **Docker Compose**.
 
-The entire system is orchestrable locally using **Docker Compose** and ready for deployment online.
+The system enables businesses to manage products, customers, orders, and inventory with real-time stock tracking and business-rule validation.
 
 ---
 
-## 1. System Architecture
+#  Live Application
+
+### Frontend
+
+https://inventory-order-management-sys.vercel.app/
+
+### Backend API
+
+https://inventory-ordermanagementsys.onrender.com
+
+### Docker Hub Image
+
+https://hub.docker.com/r/chandan3docker/inventory-backend
+
+### GitHub Repository
+
+https://github.com/chandan3kumar/Inventory-OrderManagementSys
+
+---
+
+#  Technology Stack
+
+## Frontend
+
+* React (Vite)
+* JavaScript
+* CSS3
+
+## Backend
+
+* Python
+* FastAPI
+* SQLAlchemy
+
+## Database
+
+* PostgreSQL
+
+## DevOps
+
+* Docker
+* Docker Compose
+* Docker Hub
+
+## Deployment
+
+* Vercel
+* Render
+
+---
+
+#  Features
+
+## Product Management
+
+* Add Products
+* Update Products
+* Delete Products
+* View Product Catalog
+* Unique SKU Validation
+
+## Customer Management
+
+* Add Customers
+* Delete Customers
+* View Customer Directory
+* Unique Email Validation
+
+## Order Management
+
+* Create Orders
+* View Orders
+* Cancel Orders
+* Automatic Stock Deduction
+* Automatic Stock Restoration
+
+## Inventory Tracking
+
+* Real-Time Inventory Updates
+* Low Stock Monitoring
+* Inventory Validation Before Order Creation
+
+---
+
+#  Business Rules
+
+## Product Rules
+
+* SKU must be unique.
+* Duplicate SKU entries are blocked.
+
+## Customer Rules
+
+* Customer email must be unique.
+* Duplicate email registrations are blocked.
+
+## Order Rules
+
+* Orders cannot be placed if stock is insufficient.
+* Stock quantity is automatically reduced after successful order creation.
+* Order totals are calculated automatically by the backend.
+* Cancelling an order restores inventory quantities.
+
+---
+
+# System Architecture
 
 ```mermaid
 graph TD
-    subgraph Frontend ["React App Container (Port 80)"]
-        UI["Vite + React UI"]
-        CSS["Vanilla Custom CSS"]
+    subgraph Frontend
+        UI[React + Vite]
     end
 
-    subgraph Backend ["FastAPI Container (Port 8000)"]
-        API["FastAPI Router"]
-        CRUD["Business & Transaction CRUD"]
-        ORM["SQLAlchemy ORM"]
+    subgraph Backend
+        API[FastAPI]
+        CRUD[Business Logic]
+        ORM[SQLAlchemy]
     end
 
-    subgraph Database ["PostgreSQL Container (Port 5432)"]
-        DB[("PostgreSQL 15 Engine")]
-        VOL["Named Volume: postgres_data"]
+    subgraph Database
+        DB[(PostgreSQL)]
     end
 
-    UI -->|JSON REST HTTP| API
+    UI --> API
     API --> CRUD
     CRUD --> ORM
     ORM --> DB
-    DB --> VOL
 ```
 
 ---
 
-## 2. Key Features & Business Logic
+#  API Endpoints
 
-### Unique Constraints
-- **SKU Code**: Enforced unique SKU validation inside `backend/app/crud.py` during product registration and updates. Returns `HTTP 400 Bad Request` if a duplicate exists.
-- **Customer Email**: Enforced unique email validation inside `backend/app/crud.py`. Returns `HTTP 400 Bad Request` if a duplicate email is entered.
+## Products
 
-### Transaction-Safe Order Placement
-- When an order request is received, the backend opens a single transaction block.
-- It iterates through each line item, checks the current catalog stock, and deducts the inventory.
-- If **any** item fails the stock availability check, the entire transaction rolls back (`db.rollback()`), and stock counts remain untouched.
-- Unit prices are locked at the time of purchase (`OrderItem.unit_price`), isolating orders from subsequent price changes.
-- Total amount is calculated automatically on the server.
+```http
+POST   /products
+GET    /products
+GET    /products/{id}
+PUT    /products/{id}
+DELETE /products/{id}
+```
 
-### Stock Restoration on Cancel
-- Deleting/cancelling an order (`DELETE /orders/{id}`) automatically restores the stock of all line items back to the product database before discarding the order record.
+## Customers
+
+```http
+POST   /customers
+GET    /customers
+GET    /customers/{id}
+DELETE /customers/{id}
+```
+
+## Orders
+
+```http
+POST   /orders
+GET    /orders
+GET    /orders/{id}
+DELETE /orders/{id}
+```
 
 ---
 
-## 3. Local Execution Guide
+# Local Setup
 
-To run this application locally, ensure you have **Docker** and **Docker Compose** installed.
+## Clone Repository
 
-### Step 1: Clone the repository
-Clone the repository using Git:
 ```bash
 git clone https://github.com/chandan3kumar/Inventory-OrderManagementSys.git
 cd Inventory-OrderManagementSys
 ```
 
-### Step 2: Build & Start Services
-From the root directory, run:
+## Run Using Docker Compose
+
 ```bash
 docker compose up --build
 ```
-This command builds the frontend static package, builds the backend Python app, downloads PostgreSQL, configures the database, and boots all services.
-
-### Step 3: Access the Applications
-- **Frontend Panel**: [http://localhost:80](http://localhost:80)
-- **Backend API Docs (Swagger)**: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ---
 
-## 4. Docker Hub Image Publishing (Backend)
-To publish the backend image to Docker Hub:
-1. Open terminal inside the `/backend` directory.
-2. Build the image with your Docker Hub handle tag:
-   ```bash
-   docker login
-   docker build -t <your-dockerhub-username>/inventory-backend:latest .
-   ```
-3. Push the image to Docker Hub:
-   ```bash
-   docker push <your-dockerhub-username>/inventory-backend:latest
-   ```
+# Access Services
+
+### Frontend
+
+```txt
+http://localhost
+```
+
+### Backend API
+
+```txt
+http://localhost:8000
+```
+
+### Backend Swagger Documentation
+
+```txt
+http://localhost:8000/docs
+```
 
 ---
 
-## 5. Production Deployment Guidelines
+#  Docker Hub
 
-The application is structured to allow quick, free deployments using standard cloud hosting providers.
+Pull Backend Image:
 
-### 5.1 Backend & Database Deployment (Render / Railway / Fly.io)
+```bash
+docker pull chandan3docker/inventory-backend:latest
+```
 
-We recommend using **Render** or **Railway**:
+Run Backend Container:
 
-1. **PostgreSQL Database Setup**:
-   - Provision a PostgreSQL database on your hosting provider (e.g., Render's free PG database tier).
-   - Copy the database connection string (`postgresql://...`).
+```bash
+docker run -p 8000:8000 chandan3docker/inventory-backend:latest
+```
 
-2. **Backend Web Service Setup**:
-   - Link your GitHub repository (`chandan3kumar/Inventory-OrderManagementSys`).
-   - Set the build context or **Root Directory** to `backend/`.
-   - Set the runtime environment to **Docker** (it will automatically find the backend Dockerfile).
-   - Configure the following environment variables:
-     - `DATABASE_URL`: Your production PostgreSQL connection string.
-   - Deploy the service. Take note of the live URL (e.g., `https://my-inventory-api.onrender.com`).
+Docker Hub Repository:
+
+https://hub.docker.com/r/chandan3docker/inventory-backend
 
 ---
 
-### 5.2 Frontend Deployment (Vite + Vercel / Netlify)
+#  Deployment
 
-We recommend using **Vercel**:
+## Backend Deployment (Render)
 
-1. **Vercel / Netlify Configuration**:
-   - Create a new project in Vercel and import your GitHub repository (`chandan3kumar/Inventory-OrderManagementSys`).
-   - Set the **Root Directory** to `frontend/`.
-   - Set the **Framework Preset** to `Vite`.
-   - Add the following environment variable:
-     - `VITE_API_URL`: Your live backend API URL (e.g., `https://my-inventory-api.onrender.com`).
-   - Click **Deploy**. Vercel will compile the React code and host it on a globally fast CDN.
+Environment Variable:
+
+```env
+DATABASE_URL=<your-postgresql-connection-string>
+```
+
+## Frontend Deployment (Vercel)
+
+Environment Variable:
+
+```env
+VITE_API_URL=https://inventory-ordermanagementsys.onrender.com
+```
+
+---
+
+---
+
+#  Author
+
+**Chandan Kumar**
+
+MCA (2024–2026)
+
+ Backend Developer | Full Stack Developer
+
+GitHub: https://github.com/chandan3kumar
+
+LinkedIn: https://www.linkedin.com/in/chandan-kumar-160a12269
