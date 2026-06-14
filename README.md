@@ -10,20 +10,20 @@ The entire system is orchestrable locally using **Docker Compose** and ready for
 
 ```mermaid
 graph TD
-    subgraph Frontend [React App Container (Port 80)]
-        UI[Vite + React UI]
-        CSS[Vanilla Custom CSS]
+    subgraph Frontend ["React App Container (Port 80)"]
+        UI["Vite + React UI"]
+        CSS["Vanilla Custom CSS"]
     end
 
-    subgraph Backend [FastAPI Container (Port 8000)]
-        API[FastAPI Router]
-        CRUD[Business & Transaction CRUD]
-        ORM[SQLAlchemy ORM]
+    subgraph Backend ["FastAPI Container (Port 8000)"]
+        API["FastAPI Router"]
+        CRUD["Business & Transaction CRUD"]
+        ORM["SQLAlchemy ORM"]
     end
 
-    subgraph Database [PostgreSQL Container (Port 5432)]
-        DB[(PostgreSQL 15 Engine)]
-        VOL[(Named Volume: postgres_data)]
+    subgraph Database ["PostgreSQL Container (Port 5432)"]
+        DB[("PostgreSQL 15 Engine")]
+        VOL["Named Volume: postgres_data"]
     end
 
     UI -->|JSON REST HTTP| API
