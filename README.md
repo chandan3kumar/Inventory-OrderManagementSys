@@ -235,7 +235,7 @@ https://hub.docker.com/r/chandan3docker/inventory-backend
 Environment Variable:
 
 ```env
-DATABASE_URL=<your-postgresql-connection-string>
+DATABASE_URL=postgresql://<username>:<password>@<host>/<database>
 ```
 
 ## Frontend Deployment (Vercel)
@@ -250,7 +250,7 @@ VITE_API_URL=https://inventory-ordermanagementsys.onrender.com
 
 ---
 
-#  Author
+
 
 **Chandan Kumar**
 
