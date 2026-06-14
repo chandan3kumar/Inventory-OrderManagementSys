@@ -55,7 +55,7 @@ export default function App() {
                 className={`nav-btn ${activeTab === 'dashboard' ? 'active' : ''}`}
                 onClick={() => setActiveTab('dashboard')}
               >
-                📊 Dashboard
+                Dashboard
               </button>
             </li>
             <li className="nav-item">
@@ -63,7 +63,7 @@ export default function App() {
                 className={`nav-btn ${activeTab === 'products' ? 'active' : ''}`}
                 onClick={() => setActiveTab('products')}
               >
-                📦 Products Catalog
+                Products Catalog
               </button>
             </li>
             <li className="nav-item">
@@ -71,7 +71,7 @@ export default function App() {
                 className={`nav-btn ${activeTab === 'customers' ? 'active' : ''}`}
                 onClick={() => setActiveTab('customers')}
               >
-                👥 Customers List
+                 Customers List
               </button>
             </li>
             <li className="nav-item">
@@ -79,7 +79,7 @@ export default function App() {
                 className={`nav-btn ${activeTab === 'orders' ? 'active' : ''}`}
                 onClick={() => setActiveTab('orders')}
               >
-                💼 Orders Ledger
+                 Orders Ledger
               </button>
             </li>
           </ul>
